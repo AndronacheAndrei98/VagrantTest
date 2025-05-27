@@ -36,6 +36,9 @@ sudo apt update
 echo "Installing redis-server"
 sudo apt install -y redis-server
 
+echo "Replace default Redis config"
+sudo \cp -r /vagrant/redisConfig/redis.conf /etc/redis/
+
 echo "Enabling Redis service to start on boot"
 sudo systemctl enable redis-server
 

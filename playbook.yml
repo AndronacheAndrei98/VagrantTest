@@ -58,6 +58,15 @@
         groups: docker
         append: true
 
+    - name: Copy file and overwrite if it exists
+      ansible.builtin.copy:
+        src: /vagrant/mariaConfig/50-server.cnf
+        dest: /etc/mysql/mariadb.conf.d/
+        owner: root
+        group: root
+        mode: '0644'
+        force: yes
+
     - name: Install MariaDB server
       apt:
         name: mariadb-server
