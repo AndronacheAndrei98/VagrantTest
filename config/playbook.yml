@@ -1,0 +1,84 @@
+---
+- hosts: all
+#  vars_prompt:
+#
+#    - name: postgrespass
+#      prompt: What do you wish the postgres password to be?
+
+  remote_user: ubuntu
+  become: true
+  tasks:
+    - name: install dependencies
+      apt:
+        name: "{{item}}"
+        state: present
+        update_cache: yes
+      loop:
+        - apt-transport-https
+        - ca-certificates
+        - curl
+        - gnupg-agent
+        - software-properties-common
+
+    - name: add GPG key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: add docker repository to apt
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu bionic stable
+        state: present
+
+    - name: install docker
+      apt:
+        name: "{{item}}"
+        state: latest
+        update_cache: yes
+      loop:
+        - docker-ce
+        - docker-ce-cli
+        - containerd.io
+
+    - name: check docker is active
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Ensure group "docker" exists
+      ansible.builtin.group:
+        name: docker
+        state: present
+
+    - name: Add user to docker group
+      ansible.builtin.user:
+        name: vagrant
+        groups: docker
+        append: true
+
+    - name: Pull docker image
+      ansible.builtin.shell: docker pull postgres
+
+#    - name: Run Postgres Docker instance
+#      ansible.builtin.shell: docker run -d --name postgres -e POSTGRES_USER=mastodon -e POSTGRES_PASSWORD={ postgrespass } -e POSTGRES_DB=mastodon -p 5432:5432 postgres:latest
+#
+#    - name: Install Postgres server
+#      apt:
+#        name: postgresql
+#        state: present
+#
+#    - name: Copy file and overwrite if it exists
+#      ansible.builtin.copy:
+#        src: /home/vagrant/config/pgConfig/postgresql.conf
+#        dest: /etc/postgresql/12/main/
+#        owner: root
+#        group: root
+#        mode: '0644'
+#        force: yes
+#
+#    - name: Ensure Postgresql service is running and enabled
+#      service:
+#        name: postgresql
+#        state: restarted
+#        enabled: yes

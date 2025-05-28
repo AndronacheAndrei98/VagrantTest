@@ -1,0 +1,29 @@
+---
+services:
+  mastodon:
+    image: lscr.io/linuxserver/mastodon:latest
+    container_name: mastodon
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=UTC
+      - LOCAL_DOMAIN=localhost
+      - REDIS_HOST=192.168.56.11
+      - REDIS_PORT=6379
+      - DB_HOST=192.168.56.12
+      - DB_USER=mastodon
+      - DB_NAME=mastodon
+      - DB_PASS=mastodon
+      - DB_PORT=5432
+      - ES_ENABLED=false
+      - OTP_SECRET=f1d7693986f4fd3c5147f3f3a283f494fc810a72cb49ccaa18530178b8f8e5361a1d398abafa199c89074305597a129635d96a591b78b105bfeffbe1da655ebe
+      - SECRET_KEY_BASE=6832e98d438d01cd24631a97ee42f9c21ad616fc349a3fdf9301b40e9acb14c442917fd85d69f72a1946d1a88ae0169d784427241dcbd5dda9f90573a88a4cc5
+      - VAPID_PRIVATE_KEY=sCT3bZePAepwS21x-8TyDd_2JBAo3gTOOQNdumcgwTs=
+      - VAPID_PUBLIC_KEY=BDZwl-tBezXM3HaZ1L5b3BFy8RFpVswai06CU1F_v1WMPVvDs4hHe4VykxgIwuy6QNhGGmPcPOQVVDeGPxZY2Oc=
+      - ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY=67cqmVkne4FUhUGh3Qg0kvcUz1AOJgoZ
+      - ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT=i1jhMsF2opUNmF324tEV5CjfeyyP7JDw
+      - ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY=fJnKensthUmsuh9qmB5j5XFFKGrEUVTA
+    ports:
+      - 80:80
+      - 443:443
+    restart: unless-stopped

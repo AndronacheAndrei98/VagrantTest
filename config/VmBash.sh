@@ -37,13 +37,13 @@ echo "Installing redis-server"
 sudo apt install -y redis-server
 
 echo "Replace default Redis config"
-sudo \cp -r /vagrant/redisConfig/redis.conf /etc/redis/
+sudo \cp -r /home/vagrant/config/redisConfig/redis.conf /etc/redis/
 
 echo "Enabling Redis service to start on boot"
 sudo systemctl enable redis-server
 
 echo "Starting Redis service"
-sudo systemctl start redis-server
+sudo systemctl restart redis-server
 
 echo "Checking Redis service status"
 sudo systemctl status redis-server --no-pager
